@@ -2,10 +2,10 @@ from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.responses import RedirectResponse
 from fastapi import FastAPI, Request, Response
 from auth import authenticate_user, get_password_hash
-from schemas import UserCreate, User
+from schemas import UserCreate, User, ToDoCreate, ToDo
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
-from models import fake_users_db
+from models import fake_users_db, fake_todos_db
 
 app = FastAPI()
 
@@ -21,6 +21,9 @@ app.add_middleware(
 )
 
 app.add_middleware(SessionMiddleware, secret_key="your_secret_key")
+
+# Database simulation
+fake_todos_db = []
 
 @app.post("/register", response_model=User)
 def register(user: UserCreate):
@@ -61,3 +64,44 @@ def read_home(request: Request):
 def logout(response: Response):
     response.delete_cookie("session_id")
     return {"message": "Logout successful"}
+
+@app.post("/todos", response_model=ToDo)
+def create_todo(request: Request, todo: ToDoCreate):
+    session_id = request.cookies.get("session_id")
+    if not session_id:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    user = next((user for user in fake_users_db if user["username"] == session_id), None)
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid session")
+    
+    todo_dict = {
+        "id": len(fake_todos_db) + 1,
+        "title": todo.title,
+        "description": todo.description,
+        "username": user["username"]
+    }
+    fake_todos_db.append(todo_dict)
+    return todo_dict
+
+@app.get("/todos", response_model=list[ToDo])
+def list_todos(request: Request):
+    session_id = request.cookies.get("session_id")
+    if not session_id:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    user_todos = [todo for todo in fake_todos_db if todo["username"] == session_id]
+    return user_todos
+
+@app.delete("/todos/{todo_id}")
+def delete_todo(todo_id: int, request: Request):
+    session_id = request.cookies.get("session_id")
+    if not session_id:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    todo = next((todo for todo in fake_todos_db if todo["id"] == todo_id and todo["username"] == session_id), None)
+    if not todo:
+        raise HTTPException(status_code=404, detail="To-Do not found")
+    
+    fake_todos_db.remove(todo)
+    return {"message": "To-Do deleted"}
