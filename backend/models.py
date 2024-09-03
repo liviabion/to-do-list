@@ -6,3 +6,4 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # Simulando um banco de dados
 fake_users_db = []
+fake_todos_db = []
