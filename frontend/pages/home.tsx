@@ -31,10 +31,6 @@ const NavBar = styled.div`
   z-index: 100;
 `;
 
-const NavBarTitle = styled.h1`
-  font-size: 2rem;
-  color: #fff;
-`;
 
 const NavBarLogout = styled.button`
   background: none;
@@ -53,6 +49,10 @@ const Sidebar = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+
+  @media (max-width: 600px) {
+    display: none;
+  }
 `;
 
 const SidebarTop = styled.div`
@@ -82,6 +82,17 @@ const UserName = styled.h1`
   text-align: center;
 `;
 
+const UserNameResponsive = styled.h1`
+  display: none;
+
+  @media (max-width: 600px) {
+    display: block;
+    font-size: 1.5rem;
+    margin-top: 10px;
+    text-align: center;
+  }
+`;
+
 const AppName = styled.h2`
   font-size: 1.2rem;
   color: #FFFFFF;
@@ -105,6 +116,11 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const Title = styled.h2`
@@ -124,10 +140,17 @@ const AddButton = styled.button`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+
+  
 `;
 
 const ToDoList = styled.ul`
   margin-top: 20px;
+  @media (max-width: 600px) {
+    margin-right: 0;
+    padding: 0;
+    padding-top: 20px;
+  }
 `;
 
 const ToDoItem = styled.li`
@@ -138,6 +161,10 @@ const ToDoItem = styled.li`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+
+  @media (max-width: 600px) {
+    margin-right: 0;
+  }
 `;
 
 const ToDoTitle = styled.h3`
@@ -167,6 +194,7 @@ const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
 `;
 
 const ModalContent = styled.div`
@@ -175,6 +203,11 @@ const ModalContent = styled.div`
   border-radius: 8px;
   width: 400px;
   text-align: center;
+
+
+  @media (max-width: 600px){
+    width: 70%;
+  }
 `;
 
 const ModalInput = styled.input`
@@ -200,18 +233,30 @@ const ModalTextarea = styled.textarea`
 const ModalButton = styled.button`
   background: linear-gradient(#F29682, #EE69AC, #CB4BCF);
   border: none;
-  color: #000000;
+  color: #FFFFFF;
   padding: 15px 20px;
   cursor: pointer;
   border-radius: 5px;
   margin-right: 10px;
   font-size: 15px;
   width: 30%;
+
+
+  @media (max-width: 600px){
+    width: 100%;
+    margin-bottom: 5px;
+    margin-top: 15px;
+  }
 `;
 
 const CancelButton = styled(ModalButton)`
   background: #1e1e1e;
   width: 30%;
+
+
+  @media (max-width: 600px){
+    width: 100%;
+  }
 `;
 
 const HomePage = () => {
@@ -297,6 +342,7 @@ const HomePage = () => {
       </Sidebar>
       <MainContent>
         <Header>
+          <UserNameResponsive>Olá, {user.username}!</UserNameResponsive>
           <Title>Minhas tasks</Title>
           <AddButton onClick={() => setIsModalOpen(true)}>+</AddButton>
         </Header>
