@@ -24,6 +24,11 @@ const RegisterBox = styled.div`
   padding: 40px;
   border-radius: 8px;
   width: 400px;
+
+  @media (max-width: 800px) {
+    padding-left: 10px;
+    width: 80%;
+  }
 `;
 
 const Title = styled.h1`
@@ -78,6 +83,9 @@ const CirclesContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin-left: 40px;
+  @media (max-width: 800px) {
+    display: none;
+  }
 `;
 
 
